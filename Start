@@ -1,0 +1,42 @@
+# by Gabriel Hernandes
+# GitHub: https://github.com/Gabriel-Hernandess
+# Code created to learn more about Python develop.
+
+from pytube import YouTube
+
+print("-------------------------------------------------------")
+print("| Welcome to the Youtube video download!              |\n")
+print("| Here, you can download VIDEO or SONG fast and easy! |")
+print("-------------------------------------------------------\n")
+
+while True:
+    link = input("To continue, please, just paste the YouTube video URL: ")
+    yt = YouTube(link)
+
+    title = yt.title
+
+    confirm = input("You really want download {title}? (Y/N): ")
+
+    if confirm == 'Y':
+        try:
+            yt = yt.streams.get_highest_resolution()
+            yt.download()
+            print("Downloading...\n")
+            print(f"Download Finished!\n")
+        except:
+            choice_try = input("Sorry, one error has ocurred downloading your video, want try again? (Y/N): ")
+
+            if choice_try == 'N':
+                break
+            else:
+                continue
+
+    else:
+        choice_f = input("Want finish the program? (Y/N): ")
+
+        if choice_f == 'N':
+            break
+        else:
+            continue
+
+# https://youtu.be/DKbfBSrjVHA (link teste)
