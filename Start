@@ -1,42 +1,59 @@
-# by Gabriel Hernandes
-# GitHub: https://github.com/Gabriel-Hernandess
-# Code created to learn more about Python develop.
+# code created to learn more about python
+# created by Gabriel Hernandes
+# linkedin: https://br.linkedin.com/in/gabriel-hernandes-4a3b8b248?trk=people-guest_people_search-card
+# github: https://github.com/Gabriel-Hernandess/Pytube-Video-Download
 
+
+from tkinter import *
 from pytube import YouTube
-
-print("-------------------------------------------------------")
-print("| Welcome to the Youtube video download!              |\n")
-print("| Here, you can download VIDEO or SONG fast and easy! |")
-print("-------------------------------------------------------\n")
-
-while True:
-    link = input("To continue, please, just paste the YouTube video URL: ")
-    yt = YouTube(link)
-
-    title = yt.title
-
-    confirm = input("You really want download {title}? (Y/N): ")
-
-    if confirm == 'Y':
-        try:
-            yt = yt.streams.get_highest_resolution()
-            yt.download()
-            print("Downloading...\n")
-            print(f"Download Finished!\n")
-        except:
-            choice_try = input("Sorry, one error has ocurred downloading your video, want try again? (Y/N): ")
-
-            if choice_try == 'N':
-                break
-            else:
-                continue
-
-    else:
-        choice_f = input("Want finish the program? (Y/N): ")
-
-        if choice_f == 'N':
-            break
-        else:
-            continue
+from PIL import ImageTk, Image
+from urllib.request import urlopen
+from tkmacosx import Button
 
 # https://youtu.be/DKbfBSrjVHA (link teste)
+
+def download_mp4():
+    url = YouTube(str(link.get()))
+    url = url.streams.get_highest_resolution()
+    url.download(filename=url.title+".mp4")
+
+def download_mp3():
+    url = YouTube(str(link.get()))
+    url = url.streams.filter(only_audio=True).first()
+    url.download(filename=url.title+".mp3")
+
+def download():
+    
+    url = YouTube(str(link.get()))
+    Label(sistem_pytube, text=url.title, bg="white", fg="black", bd=3, highlightbackground="grey", highlightthickness=3).place(x=230, y=205)
+
+    Button(sistem_pytube, text="MP4 Download", bd=5, highlightbackground = "black", highlightthickness = 3, bg="white", command=download_mp4).place(x=230, y=550)
+    Button(sistem_pytube, text="MP3 Download", bd=5, highlightbackground = "black", highlightthickness = 3, bg="white",command=download_mp3).place(x=450, y=550)
+
+    u = urlopen(url.thumbnail_url)
+    raw_data = u.read()
+    u.close
+
+    image = ImageTk.PhotoImage(data=raw_data)
+    Label(sistem_pytube, image = image, width=450, height=250, bd=1,  highlightbackground="black", highlightthickness=2).place(x=180, y=250).pack()
+
+
+sistem_pytube=Tk()
+sistem_pytube.title("PyTube Download")
+sistem_pytube.geometry("800x750")
+sistem_pytube.minsize(800, 750) 
+sistem_pytube.maxsize(800, 750)
+sistem_pytube.configure(background="white")
+
+text_main=Label(sistem_pytube, text="Youtube Video Download", background="red", foreground="white")
+text_main.place(x=280, y=20, width=220, height=30)
+
+text_instruct=Label(sistem_pytube, text="Please, enter a video Url", bg="white" ,fg="black")
+text_instruct.place(x=195, y=72)
+
+link=Entry(sistem_pytube, background="grey")
+link.place(x=170, y=100, width=280, height=30)
+
+download_btn = Button(sistem_pytube, text="Search", bd=5, highlightbackground = "black", highlightthickness = 3, bg="white", command=download).place(x=490, y=95)
+
+sistem_pytube.mainloop()
